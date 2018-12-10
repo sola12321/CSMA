@@ -4,7 +4,7 @@ from numpy import var
 from random import choice
 
 
-def csma(numOfNodes, packetLength, R, maxRetransmissionAttempt, timeOfSimulation):
+def csma(numOfNodes, packetLength, R, maxRetransmissionAttempt, timeOfSimulation, out):
     nodes = [Node(R[0], maxRetransmissionAttempt) for i in range(numOfNodes)]
     nodeOnTransmission = None
     nodesCountDownTo0 = []
@@ -50,19 +50,25 @@ def csma(numOfNodes, packetLength, R, maxRetransmissionAttempt, timeOfSimulation
                     node.countDown()
                 channelIdle += 1
     print(channelUsed, channelIdle)
-    print("Channel utilization:", channelUsed * 1. / timeOfSimulations)
-    print("Channel idle fraction:", channelIdle * 1. / timeOfSimulations)
+    print("Channel utilization:", "{0:.2%}".format(channelUsed * 1. / timeOfSimulations))
+    print("Channel idle fraction:", "{0:.2%}".format(channelIdle * 1. / timeOfSimulations))
+    out.writelines("Channel utilization: "+ str("{0:.2%}".format(channelUsed * 1. / timeOfSimulations)) + '\n')
+    out.writelines("Channel idle fraction :"+ str("{0:.2%}".format(channelIdle * 1. / timeOfSimulations)) + '\n')
     totalNumOfCollisions = sum([node.collosions for node in nodes])
     print("Total number of collisions:", totalNumOfCollisions)
-    print("Variance in number of successful transmissions:", var([node.successfulTransmissions for node in nodes]), [node.successfulTransmissions for node in nodes])
+    out.writelines("Total number of collisions: "+ str(totalNumOfCollisions) + '\n')
+    print("Variance in number of successful transmissions:", var([node.successfulTransmissions for node in nodes]))
     print("Variance in number of collisions:", var([node.collosions for node in nodes]))
-
+    out.writelines("Variance in number of successful transmissions: "+ str(var([node.successfulTransmissions for node in nodes])) + '\n')
+    out.writelines("Variance in number of collisions: "+ str(var([node.collosions for node in nodes])) + '\n')
 
 
 
 
 
 with open(sys.argv[1]) as input:
+    out = open("output.txt", "w")
+
     numOfNodes = int(input.readline().strip().split()[1])
     packetLength = int(input.readline().strip().split()[1])
     R = input.readline().strip().split()[1:]
@@ -71,5 +77,5 @@ with open(sys.argv[1]) as input:
     maxRetransmissionAttempt = int(input.readline().strip().split()[1])
     timeOfSimulations = int(input.readline().strip().split()[1])
     print(numOfNodes, packetLength, R, maxRetransmissionAttempt, timeOfSimulations)
-    csma(numOfNodes, packetLength, R, maxRetransmissionAttempt, timeOfSimulations)
-
+    csma(numOfNodes, packetLength, R, maxRetransmissionAttempt, timeOfSimulations, out)
+    out.close()
