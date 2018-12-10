@@ -29,18 +29,21 @@ def csma(numOfNodes, packetLength, R, maxRetransmissionAttempt, timeOfSimulation
                 if node.getBackoff() == 0:
                     nodesCountDownTo0.append(node)
             if len(nodesCountDownTo0) > 0:
-                nodeOnTransmission = choice(nodesCountDownTo0)
-                currentPacketLeft = packetLength
-                currentPacketLeft -= 1
-                channelUsed += 1
-                del nodesCountDownTo0[nodesCountDownTo0.index(nodeOnTransmission)]
-                # two or more count down to 0, collisions. double the R
-                if len(nodesCountDownTo0) > 0:
+                if len(nodesCountDownTo0) > 1:
                     for node in nodesCountDownTo0:
                         numOfCollisions += 1
                         node.collosions += 1
                         node.dropAPacket()
-                nodesCountDownTo0 = []
+                    nodesCountDownTo0 = []
+                    channelIdle += 1
+                # only one
+                else:
+                    nodeOnTransmission = nodesCountDownTo0[0]
+                    currentPacketLeft = packetLength
+                    currentPacketLeft -= 1
+                    channelUsed += 1
+                    nodesCountDownTo0 = []
+                    
             # no count down to 0, all count down
             else:
                 for node in nodes:
@@ -51,7 +54,7 @@ def csma(numOfNodes, packetLength, R, maxRetransmissionAttempt, timeOfSimulation
     print("Channel idle fraction:", channelIdle * 1. / timeOfSimulations)
     totalNumOfCollisions = sum([node.collosions for node in nodes])
     print("Total number of collisions:", totalNumOfCollisions)
-    print("Variance in number of successful transmissions:", var([node.successfulTransmissions for node in nodes]))
+    print("Variance in number of successful transmissions:", var([node.successfulTransmissions for node in nodes]), [node.successfulTransmissions for node in nodes])
     print("Variance in number of collisions:", var([node.collosions for node in nodes]))
 
 
