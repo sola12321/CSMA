@@ -3,5 +3,6 @@ This simulator is built with python. To build the executable, **pyinstaller** mu
 Run the following command to install **pyinstaller**
 ```
 pip install pyinstaller
+pip install --upgrade setuptools
 ```
 For details of the installation, please see https://medium.com/dreamcatcher-its-blog/making-an-stand-alone-executable-from-a-python-script-using-pyinstaller-d1df9170e263.
