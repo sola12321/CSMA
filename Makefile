@@ -11,3 +11,4 @@ clean :
 	rm -r ./build
 	rm -r ./src/__pycache__
 	rm ./*.spec
+	rm ./csma
