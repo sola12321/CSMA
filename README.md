@@ -1,4 +1,4 @@
-#CSMA simulator
+# CSMA simulator
 This simulator is built with python. To build the executable, **pyinstaller** must be installed.
 Run the following command to install **pyinstaller**
 ```
