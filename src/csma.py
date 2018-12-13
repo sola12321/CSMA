@@ -35,7 +35,6 @@ def csma(numOfNodes, packetLength, R, maxRetransmissionAttempt, timeOfSimulation
                         node.collosions += 1
                         node.dropAPacket()
                     nodesCountDownTo0 = []
-                    channelIdle += 1
                 # only one
                 else:
                     nodeOnTransmission = nodesCountDownTo0[0]
